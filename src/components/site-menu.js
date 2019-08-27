@@ -1,6 +1,7 @@
-export const getMenu = () => {
+export const getMenu = (menuData) => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">
-  <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-  <a class="trip-tabs__btn" href="#">Stats</a>
+  ${menuData.map((el) => {
+    return `<a class="trip-tabs__btn ${el.active && `trip-tabs__btn--active`}" href="#">${el.title}</a>`;
+  }).join(``)}
   </nav>`;
 };
