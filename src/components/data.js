@@ -29,7 +29,7 @@ const getImages = () => {
   return imgList;
 };
 
-const Events = [
+const EventsList = [
   {
     eventTitle: `Taxi to `,
     eventIcon: `img/icons/taxi.png`,
@@ -77,32 +77,38 @@ const Events = [
   },
 ];
 
-const getOffersList = () => [
-  {
-    offerTitle: `Add luggage`,
-    price: `10`,
-    checked: getRandomValue([true, false]),
-    id: `luggage`
-  },
-  {
-    offerTitle: `Switch to comfort class`,
-    price: `150`,
-    checked: getRandomValue([true, false]),
-    id: `comfort`
-  },
-  {
-    offerTitle: `Add meal`,
-    price: `2`,
-    checked: false,
-    id: `meal`
-  },
-  {
-    offerTitle: `Choose seats`,
-    price: `9`,
-    checked: false,
-    id: `seats`
-  },
-];
+const getOffersList = () => {
+  const offersList = [
+    {
+      offerTitle: `Add luggage`,
+      price: `10`,
+      checked: false,
+      id: `luggage`
+    },
+    {
+      offerTitle: `Switch to comfort class`,
+      price: `150`,
+      checked: false,
+      id: `comfort`
+    },
+    {
+      offerTitle: `Add meal`,
+      price: `2`,
+      checked: false,
+      id: `meal`
+    },
+    {
+      offerTitle: `Choose seats`,
+      price: `9`,
+      checked: false,
+      id: `seats`
+    },
+  ];
+  for (let i = 0; i < getRandomNumber(0, 3); i += 1) {
+    offersList[getRandomNumber(0, 4)].checked = true;
+  }
+  return offersList;
+};
 
 const someText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Cras aliquet varius magna, non porta ligula feugiat eget.
@@ -130,7 +136,7 @@ const getDescription = (str) => {
 
 const getCardData = () => {
   return {
-    event: Events[Object.keys(Events)[getRandomNumber(0, Object.keys(Events).length)]],
+    eventItem: EventsList[Object.keys(EventsList)[getRandomNumber(0, Object.keys(EventsList).length)]],
     description: getDescription(someText),
     startDate: Date.now() + getRandomNumber(0, 3 * 24 * 3600 * 1000),
     endDate: Date.now() + getRandomNumber(3 * 24 * 3600 * 1000, 7 * 24 * 3600 * 1000),
@@ -189,7 +195,7 @@ export const getTripData = (points) => {
   return {
     title() {
       let route = points.map((el) => {
-        return el.event.destination;
+        return el.eventItem.destination;
       });
       if (route.length > 3) {
         route.splice(1, route.length - 2, `...`);

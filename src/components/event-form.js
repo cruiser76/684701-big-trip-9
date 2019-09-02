@@ -1,4 +1,4 @@
-export const getEventForm = ({images, description, offers, startDate, endDate, event, cost}) => {
+export const getEventForm = ({images, description, offers, startDate, endDate, eventItem, cost}) => {
   const eventStartTime = new Date(startDate);
   const eventEndTime = new Date(endDate);
 
@@ -8,7 +8,7 @@ export const getEventForm = ({images, description, offers, startDate, endDate, e
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src=${event.eventIcon} alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src=${eventItem.eventIcon} alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -75,9 +75,9 @@ export const getEventForm = ({images, description, offers, startDate, endDate, e
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          ${event.eventTitle}
+          ${eventItem.eventTitle}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${event.destination}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${eventItem.destination}" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
