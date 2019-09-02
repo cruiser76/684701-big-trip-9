@@ -124,9 +124,8 @@ const getDescription = (str) => {
     arr.pop();
   }// если последний элемент пустой уберем его
 
-  return `${new Array(strLength).fill(``).map(() => {
-    return getRandomValue(arr);
-  }).join(`.`)}.`;
+  return `${new Array(strLength).fill(``).map(() => getRandomValue(arr))
+  .join(`.`)}.`;
 };
 
 const getCardData = () => {
@@ -136,7 +135,7 @@ const getCardData = () => {
     startDate: Date.now() + getRandomNumber(0, 3 * 24 * 3600 * 1000),
     endDate: Date.now() + getRandomNumber(3 * 24 * 3600 * 1000, 7 * 24 * 3600 * 1000),
     cost: getRandomNumber(5, 250),
-    destination: getRandomValue[POINTS_OF_DESTINATION],
+    destination: getRandomValue(POINTS_OF_DESTINATION),
     offers: getOffersList(),
     images: getImages(),
   };
@@ -186,10 +185,10 @@ export const getMenuData = () => {
   ];
 };
 
-export const getTripData = (tripData) => {
+export const getTripData = (points) => {
   return {
     title() {
-      let route = tripData.map((el) => {
+      let route = points.map((el) => {
         return el.event.destination;
       });
       if (route.length > 3) {
@@ -198,8 +197,8 @@ export const getTripData = (tripData) => {
       return route.join(` — `);
     },
     date() {
-      const startDate = new Date(tripData[0].startDate);
-      const endDate = new Date(tripData[tripData.length - 1].endDate);
+      const startDate = new Date(points[0].startDate);
+      const endDate = new Date(points[points.length - 1].endDate);
       return `${startDate.getDate()} ${MONTHS[startDate.getMonth()].slice(0, 3)} — ${endDate.getDate()} ${MONTHS[endDate.getMonth()].slice(0, 3)}`;
     }
   };
