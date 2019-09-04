@@ -6,9 +6,39 @@ export const getRandomValue = (arrayOfValues) => {
   return arrayOfValues[getRandomNumber(0, arrayOfValues.length)];
 };
 
-export const getDuration = (timeInterval) => {
-  let days = Math.ceil(Math.floor(timeInterval / (24 * 3600000)));
-  let hours = Math.floor((timeInterval % 86400000) / 3600000);
-  let minutes = Math.round(((timeInterval % 86400000) % 3600000) / 60000);
-  return {days, hours, minutes};
+export const createElement = (template) => {
+  const element = document.createElement(`div`);
+  element.innerHTML = template.trim();
+  return element.firstChild;
+};
+
+// Рендер и анрендер для компонент
+const Position = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  BEFORE: `before`,
+  AFTER: `after`
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case Position.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case Position.BEFOREEND:
+      container.append(element);
+      break;
+    case Position.BEFORE:
+      container.before(element);
+      break;
+    case Position.AFTER:
+      container.after(element);
+      break;
+  }
+};
+
+export const unrender = (element) => {
+  if (element) {
+    element.remove();
+  }
 };

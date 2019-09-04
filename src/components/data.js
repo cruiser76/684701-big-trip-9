@@ -154,7 +154,7 @@ export const getPointsList = () => {
     pointsList[i] = getCardData();
   }
   return pointsList.sort((a, b) => {
-    return (a.startDate < b.startDate && a.endDate > b.endDate);
+    return a.startDate - b.startDate;
   });
 };
 
