@@ -1,4 +1,5 @@
 import {createElement} from "./utils";
+import {EventsList} from "./data";
 
 export default class EventForm {
   constructor({images, description, offers, startDate, endDate, eventItem, cost}) {
@@ -10,6 +11,7 @@ export default class EventForm {
     this._endDate = new Date(endDate);
     this._eventItem = eventItem;
     this._cost = cost;
+    this._eventsList = EventsList;
   }
 
   getElement() {
@@ -17,6 +19,50 @@ export default class EventForm {
       this._element = createElement(this.getTemplate());
     }
     return this._element;
+  }
+
+  _getUcFirst(str) {
+    return str[0].toUpperCase() + str.slice(1);
+  }
+
+  _getEventTypeTemplate(groupType) {
+    return this._eventsList.map((el) => {
+      if (el.groupType === groupType) {
+        return `<div class="event__type-item">
+        <input id="event-type-${el.eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${el.eventType}">
+        <label class="event__type-label  event__type-label--${el.eventType}" for="event-type-${el.eventType}-1">${this._getUcFirst(el.eventType)}</label>
+        </div>`;
+      }
+      return ``;
+    }).join(``);
+  }
+
+  _getOffersTemplate() {
+    if (this._offers.length > 0) {
+      return `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${this._offers.map((el) => {
+    return `
+        <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.id}-1" type="checkbox" name="event-offer-${el.id}" ${el.checked ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-${el.id}-1">
+          <span class="event__offer-title">${el.offerTitle}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${el.price}</span>
+        </label>
+        </div>`;
+  }).join(``)}
+      </div>
+    </section>`;
+    }
+    return ``;
+  }
+
+  _getPhotos() {
+    return this._images.map((el) => {
+      return `<img class="event__photo" src=${el} alt="Event photo">`;
+    }).join(``);
   }
 
   getTemplate() {
@@ -33,60 +79,12 @@ export default class EventForm {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
-
-              <div class="event__type-item">
-                <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-              </div>
+              ${this._getEventTypeTemplate(`Transfer`)}
             </fieldset>
 
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Activity</legend>
-
-              <div class="event__type-item">
-                <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-              </div>
-
-              <div class="event__type-item">
-                <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-              </div>
+              ${this._getEventTypeTemplate(`Activity`)}
             </fieldset>
           </div>
         </div>
@@ -140,34 +138,14 @@ export default class EventForm {
       </header>
 
       <section class="event__details">
-      ${this._offers.length > 0 ?
-    `<section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          <div class="event__available-offers">
-            ${this._offers.map((el) => {
-    return `
-        <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.id}-1" type="checkbox" name="event-offer-${el.id}" ${el.checked ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-${el.id}-1">
-          <span class="event__offer-title">${el.offerTitle}</span>
-          &plus;
-          &euro;&nbsp;<span class="event__offer-price">${el.price}</span>
-        </label>
-        </div>`;
-  }).join(``)}
-          </div>
-        </section>` : ``}
-
+      ${this._getOffersTemplate()}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${this._description}</p>
 
           <div class="event__photos-container">
             <div class="event__photos-tape">
-      ${this._images.map((el) => {
-    return `<img class="event__photo" src=${el} alt="Event photo">`;
-  }).join(``)}
-
+      ${this._getPhotos()}
             </div>
           </div>
         </section>

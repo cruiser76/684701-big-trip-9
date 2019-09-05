@@ -29,51 +29,69 @@ const getImages = () => {
   return imgList;
 };
 
-const EventsList = [
+export const EventsList = [
   {
     eventTitle: `Taxi to `,
     eventIcon: `img/icons/taxi.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `taxi`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Bus to `,
     eventIcon: `img/icons/bus.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `bus`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Drive to `,
     eventIcon: `img/icons/drive.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `drive`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Restaurant in `,
     eventIcon: `img/icons/restaurant.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `restaurant`,
+    groupType: `Activity`
   },
   {
     eventTitle: `Ship to `,
     eventIcon: `img/icons/ship.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `ship`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Sightseeing in `,
     eventIcon: `img/icons/sightseeing.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `sightseeing`,
+    groupType: `Activity`
   },
   {
     eventTitle: `Train to `,
     eventIcon: `img/icons/train.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `train`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Transport to `,
     eventIcon: `img/icons/transport.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `transport`,
+    groupType: `Transfer`
   },
   {
     eventTitle: `Check-in `,
     eventIcon: `img/icons/check-in.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION)
+    destination: getRandomValue(POINTS_OF_DESTINATION),
+    eventType: `check-in`,
+    groupType: `Activity`
   },
 ];
 
@@ -148,7 +166,7 @@ const getCardData = () => {
 };
 
 export const getPointsList = () => {
-  const NUMBER_OF_POINTS = 4;
+  const NUMBER_OF_POINTS = 5;
   const pointsList = [];
   for (let i = 0; i < NUMBER_OF_POINTS; i += 1) {
     pointsList[i] = getCardData();
