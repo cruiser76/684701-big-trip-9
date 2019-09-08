@@ -1,12 +1,12 @@
 import AbstractComponent from "./abstract-component";
 
-export default class DaysList extends AbstractComponent {
+export default class EventsContainer extends AbstractComponent {
   constructor() {
     super();
   }
 
   getTemplate() {
-    return `<ul class="trip-days">
+    return `<ul class="trip-events__list">
     </ul>`;
   }
 }

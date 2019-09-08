@@ -1,9 +1,9 @@
-import {createElement} from "./utils";
 import {EventsList} from "./data";
+import AbstractComponent from "./abstract-component";
 
-export default class EventForm {
+export default class EventForm extends AbstractComponent {
   constructor({images, description, offers, startDate, endDate, eventItem, cost}) {
-    this._element = undefined;
+    super();
     this._images = images;
     this._description = description;
     this._offers = offers;
@@ -12,13 +12,6 @@ export default class EventForm {
     this._eventItem = eventItem;
     this._cost = cost;
     this._eventsList = EventsList;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   _getUcFirst(str) {
@@ -152,9 +145,5 @@ export default class EventForm {
       </section>
     </form>
   </li>`;
-  }
-
-  removeElement() {
-    this._element = undefined;
   }
 }

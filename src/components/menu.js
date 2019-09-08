@@ -1,16 +1,9 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract-component";
 
-export default class Menu {
+export default class Menu extends AbstractComponent {
   constructor(menuData) {
-    this._element = undefined;
+    super();
     this._menuData = menuData;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   getTemplate() {
@@ -20,9 +13,5 @@ export default class Menu {
     return `<a class="trip-tabs__btn ${el.active && `trip-tabs__btn--active`}" href="#">${el.title}</a>`;
   }).join(``)}
   </nav>`;
-  }
-
-  removeElement() {
-    this._element = undefined;
   }
 }

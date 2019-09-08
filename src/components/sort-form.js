@@ -1,15 +1,8 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract-component";
 
-export default class SortForm {
+export default class SortForm extends AbstractComponent {
   constructor() {
-    this._element = undefined;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+    super();
   }
 
   getTemplate() {
@@ -43,9 +36,5 @@ export default class SortForm {
 
     <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
   </form>`;
-  }
-
-  removeElement() {
-    this._element = undefined;
   }
 }
