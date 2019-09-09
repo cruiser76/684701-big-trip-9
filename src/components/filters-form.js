@@ -1,16 +1,9 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract-component";
 
-export default class FiltersForm {
+export default class FiltersForm extends AbstractComponent {
   constructor(filtersData) {
-    this._element = undefined;
+    super();
     this._filtersData = filtersData;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   getTemplate() {
@@ -28,7 +21,4 @@ export default class FiltersForm {
     </form>`;
   }
 
-  removeElement() {
-    this._element = undefined;
-  }
 }

@@ -1,8 +1,8 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract-component";
 
-export default class EventCard {
+export default class EventCard extends AbstractComponent {
   constructor({eventItem, startDate, endDate, cost, offers}) {
-    this._element = undefined;
+    super();
     this._eventItem = eventItem;
     this._startDate = new Date(startDate);
     this._endDate = new Date(endDate);
@@ -16,13 +16,6 @@ export default class EventCard {
     let hours = Math.floor((timeInterval % 86400000) / 3600000);
     let minutes = Math.round(((timeInterval % 86400000) % 3600000) / 60000);
     return {days, hours, minutes};
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   getTemplate() {
@@ -62,9 +55,5 @@ export default class EventCard {
       </button>
     </div>
   </li>`;
-  }
-
-  removeElement() {
-    this._element = undefined;
   }
 }
