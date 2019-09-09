@@ -1,12 +1,19 @@
 import {getRandomNumber, getRandomValue} from './utils';
 
-const POINTS_OF_DESTINATION = [
+export const SortType = {
+  TIME_DOWN: `time-down`,
+  PRICE_DOWN: `price-down`,
+  DEFAULT: `default`
+};
+
+const PointsOfDestination = [
   `Geneva`,
   `Amsterdam`,
   `Saint Petersburg`,
   `Chamonix`
 ];
-const MONTHS = [
+
+const Months = [
   `January`,
   `February`,
   `March`,
@@ -20,6 +27,7 @@ const MONTHS = [
   `November`,
   `December`
 ];
+
 const getImages = () => {
   const NUMBER_OF_IMAGES = 5;
   const imgList = [];
@@ -33,63 +41,63 @@ export const EventsList = [
   {
     eventTitle: `Taxi to `,
     eventIcon: `img/icons/taxi.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `taxi`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Bus to `,
     eventIcon: `img/icons/bus.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `bus`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Drive to `,
     eventIcon: `img/icons/drive.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `drive`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Restaurant in `,
     eventIcon: `img/icons/restaurant.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `restaurant`,
     groupType: `Activity`
   },
   {
     eventTitle: `Ship to `,
     eventIcon: `img/icons/ship.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `ship`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Sightseeing in `,
     eventIcon: `img/icons/sightseeing.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `sightseeing`,
     groupType: `Activity`
   },
   {
     eventTitle: `Train to `,
     eventIcon: `img/icons/train.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `train`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Transport to `,
     eventIcon: `img/icons/transport.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `transport`,
     groupType: `Transfer`
   },
   {
     eventTitle: `Check-in `,
     eventIcon: `img/icons/check-in.png`,
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     eventType: `check-in`,
     groupType: `Activity`
   },
@@ -159,7 +167,7 @@ const getCardData = () => {
     startDate: Date.now() + getRandomNumber(0, 3 * 24 * 3600 * 1000),
     endDate: Date.now() + getRandomNumber(3 * 24 * 3600 * 1000, 7 * 24 * 3600 * 1000),
     cost: getRandomNumber(5, 250),
-    destination: getRandomValue(POINTS_OF_DESTINATION),
+    destination: getRandomValue(PointsOfDestination),
     offers: getOffersList(),
     images: getImages(),
   };
@@ -223,7 +231,7 @@ export const getTripData = (points) => {
     date() {
       const startDate = new Date(points[0].startDate);
       const endDate = new Date(points[points.length - 1].endDate);
-      return `${startDate.getDate()} ${MONTHS[startDate.getMonth()].slice(0, 3)} — ${endDate.getDate()} ${MONTHS[endDate.getMonth()].slice(0, 3)}`;
+      return `${startDate.getDate()} ${Months[startDate.getMonth()].slice(0, 3)} — ${endDate.getDate()} ${Months[endDate.getMonth()].slice(0, 3)}`;
     }
   };
 };
