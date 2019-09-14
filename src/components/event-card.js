@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component";
 
 export default class EventCard extends AbstractComponent {
-  constructor({eventItem, startDate, endDate, cost, offers}) {
+  constructor({eventItem, startDate, endDate, cost, offers, destination}) {
     super();
     this._eventItem = eventItem;
     this._startDate = new Date(startDate);
@@ -9,6 +9,7 @@ export default class EventCard extends AbstractComponent {
     this._cost = cost;
     this._offers = offers;
     this._duration = this._getDuration(this._endDate - this._startDate);
+    this._destination = destination;
   }
 
   _getDuration(timeInterval) {
@@ -24,7 +25,7 @@ export default class EventCard extends AbstractComponent {
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src=${this._eventItem.eventIcon} alt="Event type icon">
       </div>
-      <h3 class="event__title">${this._eventItem.eventTitle}${this._eventItem.destination}</h3>
+      <h3 class="event__title">${this._eventItem.eventTitle}${this._destination}</h3>
 
       <div class="event__schedule">
         <p class="event__time">

@@ -1,5 +1,5 @@
 import {getPointsList} from './components/data';
-import TripController from './components/trip-controller';
+import TripController from './controllers/trip-controller';
 
 const controlsContainer = document.querySelector(`.trip-main__trip-controls`);
 const infoContainer = document.querySelector(`.trip-main__trip-info`);

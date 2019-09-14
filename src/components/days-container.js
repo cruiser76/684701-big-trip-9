@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component";
 
-export default class DaysList extends AbstractComponent {
+export default class DaysContainer extends AbstractComponent {
   constructor() {
     super();
   }

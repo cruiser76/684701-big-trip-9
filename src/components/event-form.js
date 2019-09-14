@@ -1,10 +1,11 @@
-import {EventsList} from "./data";
+import {EventsList, getDescription} from "./data";
 import AbstractComponent from "./abstract-component";
 
 export default class EventForm extends AbstractComponent {
-  constructor({images, description, offers, startDate, endDate, eventItem, cost}) {
+  constructor({images, description, offers, startDate, endDate, eventItem, cost, destination}) {
     super();
     this._images = images;
+    this._destination = destination;
     this._description = description;
     this._offers = offers;
     this._startDate = new Date(startDate);
@@ -12,6 +13,7 @@ export default class EventForm extends AbstractComponent {
     this._eventItem = eventItem;
     this._cost = cost;
     this._eventsList = EventsList;
+    this._subscribeOnEvents();
   }
 
   _getUcFirst(str) {
@@ -30,12 +32,12 @@ export default class EventForm extends AbstractComponent {
     }).join(``);
   }
 
-  _getOffersTemplate() {
-    if (this._offers.length > 0) {
+  _getOffersTemplate(offersData) {
+    if (offersData) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-        ${this._offers.map((el) => {
+        ${offersData.map((el) => {
     return `
         <div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${el.id}-1" type="checkbox" name="event-offer-${el.id}" ${el.checked ? `checked` : ``}>
@@ -86,7 +88,7 @@ export default class EventForm extends AbstractComponent {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${this._eventItem.eventTitle}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._eventItem.destination}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._destination}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -131,7 +133,7 @@ export default class EventForm extends AbstractComponent {
       </header>
 
       <section class="event__details">
-      ${this._getOffersTemplate()}
+      ${this._getOffersTemplate(this._offers)}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${this._description}</p>
@@ -145,5 +147,32 @@ export default class EventForm extends AbstractComponent {
       </section>
     </form>
   </li>`;
+  }
+
+  _subscribeOnEvents() {
+    this._onDestinationChange();
+    this._onEventTypeChange();
+  }
+
+  _onEventTypeChange() {
+    this.getElement().querySelector(`.event__type-list`)
+    .addEventListener(`click`, (evt) => {
+      if (evt.target.tagName !== `LABEL`) {
+        return;
+      }
+      const eventType = evt.target.textContent.toLowerCase();
+      const eventInfo = this._eventsList.filter((el) => el.eventType === eventType);
+      this.getElement().querySelector(`.event__type-icon`).src = eventInfo[0].eventIcon;
+      this.getElement().querySelector(`.event__type-output`).textContent = eventInfo[0].eventTitle;
+    });
+  }
+
+  _onDestinationChange() {
+    this.getElement().querySelector(`#event-destination-1`)
+    .addEventListener(`change`, (evt) => {
+      evt.preventDefault();
+      this.getElement().querySelector(`.event__destination-description`).innerHTML = getDescription();
+
+    });
   }
 }
