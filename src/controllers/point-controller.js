@@ -3,6 +3,10 @@ import EventForm from '../components/event-form';
 import {render} from '../components/utils';
 import {Offers, EventsList} from '../components/data';
 
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
+
 export default class PointController {
   constructor(pointData, container, onDataChange, onChangeView) {
     this._pointData = pointData;
@@ -15,6 +19,24 @@ export default class PointController {
   }
 
   init() {
+    flatpickr(this._pointEdit.getElement().querySelector(`#event-start-time-1`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._pointData.startDate,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      altFormat: `d/m/y H:i`
+    });
+
+    flatpickr(this._pointEdit.getElement().querySelector(`#event-end-time-1`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._pointData.endDate,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      altFormat: `d/m/y H:i`
+    });
+
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         this._container.getElement().replaceChild(this._eventCard.getElement(), this._pointEdit.getElement());

@@ -1,14 +1,15 @@
-import AbstractComponent from "./abstract-component";
+import AbstractComponent from './abstract-component';
+import moment from 'moment';
 
 export default class EventCard extends AbstractComponent {
   constructor({eventItem, startDate, endDate, cost, offers, destination}) {
     super();
     this._eventItem = eventItem;
-    this._startDate = new Date(startDate);
-    this._endDate = new Date(endDate);
+    this._startDate = moment(startDate);
+    this._endDate = moment(endDate);
     this._cost = cost;
     this._offers = offers;
-    this._duration = this._getDuration(this._endDate - this._startDate);
+    this._duration = this._getDuration(this._endDate.diff(this._startDate));
     this._destination = destination;
   }
 
@@ -29,11 +30,11 @@ export default class EventCard extends AbstractComponent {
 
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${this._startDate.getHours()}:${this._startDate.getMinutes()}</time>
+          <time class="event__start-time" datetime="2019-03-18T10:30">${this._startDate.format(`HH:mm`)}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${this._endDate.getHours()}:${this._endDate.getMinutes()}</time>
+          <time class="event__end-time" datetime="2019-03-18T11:00">${this._endDate.format(`HH:mm`)}</time>
         </p>
-        <p class="event__duration">${this._duration.days ? `${this._duration.days}D ` : ``}${this._duration.hours ? `${this._duration.hours}H ` : ``}${this._duration.minutes}M</p>
+        <p class="event__duration">${this._duration.days}D ${this._duration.hours}H ${this._duration.minutes}M</p>
       </div>
 
       <p class="event__price">

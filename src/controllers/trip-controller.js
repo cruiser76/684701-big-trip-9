@@ -103,7 +103,7 @@ export default class TripController {
         render(dayItem.getElement(), eventsContainer.getElement(), `beforeend`);
         const sortByTimePoints = this._pointsList.slice().sort((a, b) => ((b.endDate - b.startDate) - (a.endDate - a.startDate)));
         sortByTimePoints.forEach((point) => {
-          const pointController = new PointController(point, eventsContainer);
+          const pointController = new PointController(point, eventsContainer, this._onDataChange, this._onChangeView);
           pointController.init();
         });
         break;
@@ -112,7 +112,7 @@ export default class TripController {
         render(dayItem.getElement(), eventsContainer.getElement(), `beforeend`);
         const sortByPricePoints = this._pointsList.slice().sort((a, b) => (b.cost - a.cost));
         sortByPricePoints.forEach((point) => {
-          const pointController = new PointController(point, eventsContainer);
+          const pointController = new PointController(point, eventsContainer, this._onDataChange, this._onChangeView);
           pointController.init();
         });
         break;
