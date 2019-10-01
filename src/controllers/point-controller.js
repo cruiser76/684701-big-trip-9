@@ -1,21 +1,24 @@
 import EventCard from '../components/event-card';
 import EventForm from '../components/event-form';
-import {render} from '../components/utils';
-import {Offers, EventsList} from '../components/data';
+import {render, unrender} from '../components/utils';
+import {EventsList} from '../components/data';
 
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
+import NewPoint from '../components/new-point';
 
 export default class PointController {
-  constructor(pointData, container, onDataChange, onChangeView) {
+  constructor(pointData, container, onDataChange, onChangeView, mode = ``) {
     this._pointData = pointData;
-    this._eventCard = new EventCard(pointData);
-    this._pointEdit = new EventForm(pointData);
+    this._eventCard = new EventCard(this._pointData);
+    this._pointEdit = new EventForm(this._pointData);
+    this._newPoint = new NewPoint(this._pointData);
     this._container = container;
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
-    this._offers = Offers;
+    this._offers = pointData.offers;
+    this._mode = mode;
   }
 
   init() {
@@ -36,6 +39,25 @@ export default class PointController {
       dateFormat: `d/m/y H:i`,
       altFormat: `d/m/y H:i`
     });
+
+    flatpickr(this._newPoint.getElement().querySelector(`#event-start-time-1`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._pointData.startDate,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      altFormat: `d/m/y H:i`
+    });
+
+    flatpickr(this._newPoint.getElement().querySelector(`#event-end-time-1`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._pointData.endDate,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      altFormat: `d/m/y H:i`
+    });
+
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -89,7 +111,53 @@ export default class PointController {
       this._onDataChange(entry, this._pointData);
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
-    render(this._container.getElement(), this._eventCard.getElement(), `beforeend`);
+
+    this._pointEdit.getElement()
+    .querySelector(`.event__reset-btn`)
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      this._onDataChange(null, this._pointData);
+    });
+
+    this._newPoint.getElement()
+    .querySelector(`.event__reset-btn`)
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      unrender(this._newPoint.getElement());
+    });
+
+    this._newPoint.getElement()
+    .querySelector(`.event__save-btn`)
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      const formData = new FormData(this._newPoint.getElement());
+
+      this._offers = this._offers.map((el) => {
+        if (Array.from(formData.keys()).some((key) => key === `event-offer-${el.id}`)) {
+          el.checked = true;
+        }
+        return el;
+      });
+
+      const entry = {
+        eventItem: this._getEventItem(formData),
+        description: this._getDescription(),
+        startDate: this._changeTimeFormat(formData.get(`event-start-time`)),
+        endDate: this._changeTimeFormat(formData.get(`event-end-time`)),
+        cost: formData.get(`event-price`),
+        offers: this._offers,
+        images: this._getImages(),
+        destination: formData.get(`event-destination`),
+      };
+      this._onDataChange(entry, null);
+    });
+
+    if (this._mode === `adding`) {
+      render(this._container.getElement(), this._newPoint.getElement(), `afterbegin`);
+    } else {
+      render(this._container.getElement(), this._eventCard.getElement(), `beforeend`);
+    }
   }
 
   _changeTimeFormat(time) {

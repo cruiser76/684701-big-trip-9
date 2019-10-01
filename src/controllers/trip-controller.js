@@ -1,7 +1,5 @@
-import {render} from '../components/utils';
-import Menu from "../components/menu";
-import FiltersForm from '../components/filters-form';
-import {getMenuData, getFiltersData, getTripData, SortType, Months} from '../components/data';
+import {render, unrender} from '../components/utils';
+import {getTripData, SortType, Months, Offers, EventsList} from '../components/data';
 import NoPointsMsg from '../components/no-points-msg';
 import TripInfo from '../components/trip-info';
 import SortForm from '../components/sort-form';
@@ -17,8 +15,6 @@ export default class TripController {
     this._contentContainer = contentContainer;
     this._pointsList = this._sortPoints(pointsList);
     this._daysList = this._getDaysList();
-    this._menu = new Menu(getMenuData());
-    this._filtersForm = new FiltersForm(getFiltersData());
     this._noPointsMsg = new NoPointsMsg();
     this._tripInfo = new TripInfo(getTripData(this._pointsList));
     this._sortForm = new SortForm();
@@ -29,36 +25,82 @@ export default class TripController {
   }
 
   init() {
-    render(this._controlsContainer.querySelector(`h2`), this._menu.getElement(), `after`);
-    render(this._controlsContainer, this._filtersForm.getElement(), `beforeend`);
+    this._setInfo();
+    this._setSortPanel();
+    this._setContentContainer();
+    this._setTotalCost();
+  }
 
+  _setContentContainer() {
+    unrender(this._daysContainer.getElement());
+    this._daysContainer.removeElement();
     if (this._pointsList.length) {
-
-      render(this._infoContainer, this._tripInfo.getElement(), `after`);
-      render(this._contentContainer, this._sortForm.getElement(), `beforeend`);
-      this._sortForm.getElement().addEventListener(`click`, (evt) => this._onSortButtonClick(evt));
-
       render(this._contentContainer, this._daysContainer.getElement(), `beforeend`);
-
-
       this._daysList.forEach((day) => {
         this._renderDay(day);
       });
 
-      const totalCost = () => {
-        return this._pointsList.reduce((acc, el) => {
-          acc += el.cost + el.offers.reduce((offersAcc, offersEl) => {
-            offersAcc += offersEl.checked ? +offersEl.price : 0;
-            return offersAcc;
-          }, 0);
-          return acc;
-        }, 0);
-      };
-      const tripTotalCost = document.querySelector(`.trip-info__cost-value`);
-      tripTotalCost.textContent = totalCost();
     } else {
       render(this._contentContainer, this._noPointsMsg.getElement(), `beforeend`);
     }
+  }
+
+  _setSortPanel() {
+    unrender(this._sortForm.getElement());
+    this._sortForm.removeElement();
+    if (this._pointsList.length) {
+      render(this._contentContainer, this._sortForm.getElement(), `beforeend`);
+      this._sortForm.getElement().addEventListener(`click`, (evt) => this._onSortButtonClick(evt));
+    }
+  }
+
+  _setInfo() {
+    unrender(this._tripInfo.getElement());
+    this._tripInfo.removeElement();
+    if (this._pointsList.length) {
+      render(this._infoContainer, this._tripInfo.getElement(), `after`);
+    }
+  }
+
+  _setTotalCost() {
+    const totalCost = () => {
+      return this._pointsList.reduce((acc, el) => {
+        acc += +el.cost + el.offers.reduce((offersAcc, offersEl) => {
+          offersAcc += offersEl.checked ? +offersEl.price : 0;
+          return offersAcc;
+        }, 0);
+        return acc;
+      }, 0);
+    };
+    const tripTotalCost = document.querySelector(`.trip-info__cost-value`);
+    tripTotalCost.textContent = totalCost();
+  }
+
+  show() {
+    this._contentContainer.classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._contentContainer.classList.add(`visually-hidden`);
+  }
+
+  createPoint() {
+    const defaultPoint = {
+      eventItem: EventsList[0],
+      description: ``,
+      startDate: new Date(),
+      endDate: new Date(),
+      cost: 0,
+      offers: Offers.slice().map((el) => Object.assign({}, el)),
+      images: [],
+      destination: ``,
+    };
+    if (!this._daysContainer._element) {
+      this._contentContainer.innerHTML = ``;
+      render(this._contentContainer, this._daysContainer.getElement(), `beforeend`);
+    }
+    const newPoint = new PointController(defaultPoint, this._daysContainer, this._onDataChange, this._onChangeView, `adding`);
+    newPoint.init();
   }
 
   _sortPoints(points) {
@@ -118,6 +160,7 @@ export default class TripController {
         break;
       case SortType.DEFAULT:
         this._sortForm.getElement().querySelector(`.trip-sort__item--day`).innerHTML = `DAY`;
+        this._daysList = this._getDaysList();
         this._daysList.forEach((day) => {
           this._renderDay(day);
         });
@@ -150,13 +193,17 @@ export default class TripController {
   }
 
   _onDataChange(newData, oldData) {
-    this._pointsList[this._pointsList.findIndex((it) => it === oldData)] = newData;
-    this._sortPoints(this._pointsList);
-    this._daysContainer.getElement().innerHTML = ``;
+    if (newData === null) {
+      this._pointsList.splice(this._pointsList.findIndex((it) => it === oldData), 1);
+    } else if (oldData === null) {
+      this._pointsList.unshift(newData);
+    } else {
+      this._pointsList[this._pointsList.findIndex((it) => it === oldData)] = newData;
+    }
+
+    this._pointsList = this._sortPoints(this._pointsList);
     this._daysList = this._getDaysList();
-    this._daysList.forEach((day) => {
-      this._renderDay(day);
-    });
+    this.init();
   }
 
   _onChangeView() {

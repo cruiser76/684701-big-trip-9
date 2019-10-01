@@ -125,7 +125,7 @@ export const Offers = [
 ];
 
 const getOffersList = () => {
-  const offersList = Offers.map((el) => Object.assign({}, el));
+  const offersList = Offers.slice().map((el) => Object.assign({}, el));
   for (let i = 0; i < getRandomNumber(0, 3); i += 1) {
     offersList[getRandomNumber(0, 4)].checked = true;
   }
